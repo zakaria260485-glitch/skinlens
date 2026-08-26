@@ -1,0 +1,14 @@
+{
+  "name": "routinegentile",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tests/run-all.js",
+    "check": "node tests/run-all.js",
+    "test": "node tests/run-all.js",
+    "test:syntax": "node tests/run-all.js --syntax-only",
+    "test:unit": "node --test",
+    "test:config": "node --test tests/security-config.test.js"
+  }
+}

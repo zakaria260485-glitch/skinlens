@@ -1,0 +1,19 @@
+{
+  "name": "RoutineGentile",
+  "short_name": "RoutineGentile",
+  "description": "Una guida cosmetica essenziale costruita sulle tue risposte.",
+  "lang": "it",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f1e9",
+  "theme_color": "#19332c",
+  "icons": [
+    {
+      "src": "/assets/routinegentile-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

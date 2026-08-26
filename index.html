@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="RoutineGentile crea una routine cosmetica essenziale dalle tue risposte, senza account, fotografie obbligatorie o dati salvati." />
+  <meta name="theme-color" content="#19332c" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="RoutineGentile · La tua routine, più semplice" />
+  <meta property="og:description" content="Una guida cosmetica essenziale costruita sulle tue risposte. Gratuita, locale e senza account." />
+  <meta property="og:image" content="/assets/routinegentile-og.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/assets/routinegentile-mark.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <title>RoutineGentile · La tua routine, più semplice</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#profileTitle">Vai al questionario</a>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="RoutineGentile, torna all'inizio">
+      <span class="brand-mark" aria-hidden="true">R</span>
+      <span>RoutineGentile</span>
+    </a>
+    <span class="privacy-pill"><i aria-hidden="true"></i> Tutto sul dispositivo</span>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="heroTitle">
+      <p class="eyebrow">ROUTINEGENTILE · BETA GRATUITA</p>
+      <h1 id="heroTitle">La tua routine.<br /><em>Più semplice.</em></h1>
+      <p class="hero-copy">Una guida cosmetica essenziale costruita soltanto sulle risposte che scegli di inserire. La foto è facoltativa e serve esclusivamente per esercitarti a ottenere uno scatto chiaro.</p>
+      <a class="hero-cta" href="#profileTitle">Crea la mia routine gratuita <span aria-hidden="true">→</span></a>
+      <div class="hero-points" aria-label="Caratteristiche principali">
+        <span>Nessun account</span>
+        <span>Nessun dato salvato</span>
+        <span>Risposte e foto non inviate</span>
+      </div>
+    </section>
+
+    <section class="promise-grid" aria-label="Perché usare RoutineGentile">
+      <article><span>01</span><h2>Pochi passaggi</h2><p>Una base mattina e sera, senza aggiungere prodotti intensivi o inutili.</p></article>
+      <article><span>02</span><h2>Risposte usate davvero</h2><p>Tipo di pelle dichiarato, sensibilità e prodotti già in uso cambiano la guida o le cautele.</p></article>
+      <article><span>03</span><h2>Nessuna falsa analisi</h2><p>RoutineGentile non diagnostica e non assegna punteggi alla pelle.</p></article>
+    </section>
+
+    <section class="builder-card" aria-labelledby="profileTitle">
+      <div class="section-heading">
+        <div><p class="step">01 / LE TUE PREFERENZE</p><h2 id="profileTitle">Costruisci la routine</h2></div>
+        <p>I campi con <b class="required-mark" aria-hidden="true">*</b> sono obbligatori. Ogni risposta modifica la routine o le sue cautele.</p>
+      </div>
+
+      <form id="profileForm" novalidate>
+        <div class="profile-grid">
+          <label>
+            <span>Tipo di pelle dichiarato <b class="required-mark" aria-hidden="true">*</b></span>
+            <select id="skinType" name="skinType" required aria-required="true">
+              <option value="">Scegli</option><option value="dry">Secca</option><option value="normal">Normale</option><option value="combination">Mista</option><option value="oily">Grassa</option><option value="unsure">Non lo so</option>
+            </select>
+          </label>
+          <label>
+            <span>Sensibilità dichiarata <b class="required-mark" aria-hidden="true">*</b></span>
+            <select id="sensitivity" name="sensitivity" required aria-required="true">
+              <option value="">Scegli</option><option value="yes">Sì, frequentemente</option><option value="sometimes">A volte</option><option value="no">No</option>
+            </select>
+          </label>
+          <label>
+            <span>Preferenza cosmetica principale <b class="required-mark" aria-hidden="true">*</b></span>
+            <select id="skinGoal" name="goal" required aria-required="true">
+              <option value="">Scegli</option><option value="comfort">Preferisco comfort e semplicità</option><option value="blemishes">Preferisco dare priorità a lucidità e aspetto delle imperfezioni</option><option value="texture">Preferisco una guida essenziale per texture e pori</option><option value="lines">Preferisco dare priorità a idratazione e protezione</option><option value="maintain">Preferisco il mantenimento essenziale</option>
+            </select>
+          </label>
+          <label>
+            <span>Usi già attivi cosmetici o terapie prescritte? <b class="required-mark" aria-hidden="true">*</b></span>
+            <select id="activeUse" name="activeUse" required aria-required="true" aria-describedby="activeHelp">
+              <option value="">Scegli</option><option value="yes">Sì</option><option value="no">No</option>
+            </select>
+            <small id="activeHelp">Per esempio prodotti intensivi o una terapia indicata da un professionista.</small>
+          </label>
+          <label>
+            <span>Hai reazioni note a prodotti cosmetici? <b class="required-mark" aria-hidden="true">*</b></span>
+            <select id="knownReactions" name="knownReactions" required aria-required="true">
+              <option value="">Scegli</option><option value="yes">Sì</option><option value="no">No</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="consent">
+          <input id="adultConsent" name="adultConsent" type="checkbox" required aria-required="true" aria-describedby="consentText privacySummary" />
+          <span id="consentText"><b class="required-mark" aria-hidden="true">*</b> Confermo di avere almeno 18 anni e di comprendere che RoutineGentile offre una guida cosmetica informativa basata sulle mie risposte.</span>
+        </label>
+        <details class="privacy-note">
+          <summary id="privacySummary">Come vengono trattate le risposte</summary>
+          <p>Le risposte vengono elaborate soltanto in questa pagina. Non sono inviate, salvate nello storico del browser o associate a un account. Ricaricando o chiudendo la pagina vengono perse.</p>
+        </details>
+        <button class="primary" id="buildRoutineBtn" type="submit" aria-describedby="formMessage" disabled>Crea la mia routine</button>
+        <p class="form-message" id="formMessage" role="alert" aria-live="assertive"></p>
+      </form>
+    </section>
+
+    <section class="photo-coach" aria-labelledby="photoCoachTitle">
+      <div class="section-heading">
+        <div><p class="step">FACOLTATIVO / PHOTO COACH</p><h2 id="photoCoachTitle">Esercitati con uno scatto frontale</h2></div>
+        <p>Questo strumento controlla soltanto risoluzione, luce generale e stabilità dell'immagine. Non cambia la routine e non valuta la pelle.</p>
+      </div>
+      <div class="photo-workspace">
+        <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="photoPrivacy photoFormats" hidden />
+        <div class="photo-intro" id="photoIntro">
+          <div class="camera-icon" aria-hidden="true"><span></span></div>
+          <strong>Un solo scatto, guardando avanti</strong>
+          <small id="photoPrivacy">La foto rimane nella pagina aperta e viene rimossa quando la cancelli o lasci la pagina.</small>
+          <small class="visually-hidden" id="photoFormats">JPEG, PNG o WebP, massimo 10 megabyte.</small>
+          <div class="button-row">
+            <button class="secondary" id="startCameraBtn" type="button">Apri fotocamera</button>
+            <button class="text-button" id="chooseFileBtn" type="button">Scegli una foto</button>
+          </div>
+        </div>
+        <div class="guided-camera" id="guidedCamera" role="region" aria-label="Fotocamera guidata" hidden>
+          <div class="video-wrap">
+            <video id="cameraVideo" autoplay muted playsinline aria-label="Anteprima della fotocamera anteriore"></video>
+            <div class="face-oval" aria-hidden="true"></div>
+          </div>
+          <div class="camera-instruction" role="status" aria-live="polite">
+            <strong>Guarda avanti e resta fermo</strong>
+            <small id="cameraQuality">Sto controllando luce e stabilità dell'immagine…</small>
+          </div>
+          <div class="camera-actions">
+            <button class="text-button light" id="cancelCameraBtn" type="button">Annulla</button>
+            <button class="shutter" id="takePhotoBtn" type="button" aria-label="Scatta la foto"><i></i></button>
+          </div>
+        </div>
+        <div class="photo-review" id="photoReview" role="region" aria-labelledby="photoReadyTitle" hidden>
+          <img id="photoPreview" alt="Anteprima dello scatto frontale scelto" />
+          <div>
+            <p class="step">CONTROLLO LOCALE</p><h3 id="photoReadyTitle">Qualità tecnica dell'immagine</h3>
+            <ul id="qualityChecks"></ul><p id="qualityAdvice"></p>
+            <button class="text-button" id="clearPhotoBtn" type="button">Rimuovi la foto</button>
+          </div>
+        </div>
+      </div>
+      <p class="form-message" id="photoMessage" role="alert" aria-live="assertive"></p>
+    </section>
+
+    <section class="results" id="results" tabindex="-1" aria-labelledby="resultsTitle" hidden>
+      <div class="results-head">
+        <div><p class="step">02 / LA TUA GUIDA</p><h2 id="resultsTitle">Routine cosmetica essenziale</h2></div>
+        <button class="text-button" id="newRoutineBtn" type="button">Modifica risposte</button>
+      </div>
+      <div class="profile-summary">
+        <p class="eyebrow">PROFILO DICHIARATO</p><h3 id="routineSummary"></h3><p id="routineMode"></p>
+        <div class="selection-chips" id="selectionChips" aria-label="Riepilogo delle risposte"></div>
+      </div>
+      <div class="routine-grid">
+        <article><p class="step">MATTINA</p><h3>Idrata e proteggi</h3><ol id="morningRoutine"></ol></article>
+        <article class="night"><p class="step">SERA</p><h3>Detergi con delicatezza</h3><ol id="eveningRoutine"></ol></article>
+      </div>
+      <div class="safety-panel">
+        <p class="step">CAUTELE PERSONALIZZATE</p><h3>Prima la tollerabilità</h3><ul id="routineCautions"></ul>
+        <p class="professional-note">Se hai una terapia prescritta, allergie, irritazione persistente o dubbi su un prodotto, rivolgiti al professionista che ti segue.</p>
+      </div>
+      <aside class="kit-offer" aria-labelledby="kitOfferTitle">
+        <div>
+          <p class="step">PORTA LA ROUTINE SU CARTA</p>
+          <h3 id="kitOfferTitle">Kit Costanza 30 Giorni</h3>
+          <p>Dieci pagine stampabili per mettere ordine tra i prodotti che possiedi, pianificare mattina e sera e segnare la costanza senza inseguire la perfezione.</p>
+          <ul aria-label="Contenuto del kit">
+            <li>Inventario prodotti</li>
+            <li>Planner e tracker di 30 giorni</li>
+            <li>Filtro anti-confusione prima degli acquisti</li>
+          </ul>
+        </div>
+        <div class="kit-purchase">
+          <strong>€7,90</strong>
+          <a class="kit-cta" href="https://payhip.com/b/HbAG9?utm_source=routinegentile&amp;utm_medium=app&amp;utm_campaign=kit_costanza_launch" target="_blank" rel="noopener sponsored">Scopri e scarica il kit <span aria-hidden="true">↗</span></a>
+          <small>Acquisto e consegna su Payhip. Si apre una pagina esterna.</small>
+        </div>
+      </aside>
+    </section>
+
+    <section class="faq" aria-labelledby="faqTitle">
+      <p class="step">DOMANDE FREQUENTI</p><h2 id="faqTitle">Prima di iniziare</h2>
+      <details><summary>RoutineGentile analizza la pelle?</summary><p>No. Usa soltanto le risposte che selezioni e non sostituisce un professionista.</p></details>
+      <details><summary>La fotografia è obbligatoria?</summary><p>No. Il photo coach è separato e facoltativo; non modifica la routine.</p></details>
+      <details><summary>Le mie risposte vengono salvate?</summary><p>No. Restano nella pagina aperta e vengono perse quando la chiudi o la ricarichi.</p></details>
+      <details><summary>Consiglia terapie o ingredienti intensivi?</summary><p>No. Propone categorie cosmetiche essenziali e cautele generali, senza modificare terapie prescritte.</p></details>
+      <p class="feedback-cta">Stai provando la beta? <a href="mailto:elialuxuryllc@gmail.com?subject=Feedback%20RoutineGentile">Invia un feedback a Mountaj Zakaria</a>.</p>
+    </section>
+  </main>
+
+  <footer><strong>RoutineGentile</strong><span>Guida cosmetica informativa · risposte e foto non inviate né salvate</span><nav aria-label="Informazioni legali"><a href="/privacy.html">Privacy</a><a href="/terms.html">Termini</a><a href="/contact.html">Contatti</a></nav></footer>
+  <noscript><p class="noscript-warning" role="alert">Per creare la routine è necessario attivare JavaScript nel browser.</p></noscript>
+  <script type="module" src="./app.js"></script>
+  <script src="./analytics.js"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
