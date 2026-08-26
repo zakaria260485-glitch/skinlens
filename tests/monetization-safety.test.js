@@ -17,6 +17,15 @@ test('paid kit is clearly optional, priced and routed to the verified Payhip pro
   assert.match(home, /Acquisto e consegna su Payhip/);
 });
 
+test('paid kit is visible before the questionnaire and the free path remains available', () => {
+  const offerIndex = home.indexOf('class="launch-offer"');
+  const questionnaireIndex = home.indexOf('id="profileTitle"');
+  assert.ok(offerIndex >= 0);
+  assert.ok(questionnaireIndex > offerIndex);
+  assert.match(home, /utm_content=hero_offer/);
+  assert.match(home, /Oppure crea la routine gratuita/);
+});
+
 test('privacy and terms distinguish the free app from the external purchase', () => {
   assert.match(privacy, /Payhip, un servizio esterno/);
   assert.match(privacy, /non riceve né conserva i dati completi della carta/);
