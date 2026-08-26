@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Marchio RoutineGentile</title>
+  <desc id="desc">Una lettera R color avorio con una foglia verde chiaro su fondo verde profondo.</desc>
+  <rect width="512" height="512" rx="256" fill="#19332c"/>
+  <path d="M168 370V137h103c72 0 113 37 113 98 0 47-25 78-67 91l77 44h-73l-69-42h-25v42h-59Zm59-96h39c37 0 57-12 57-38 0-27-19-40-57-40h-39v78Z" fill="#fffdf8"/>
+  <path d="M323 121c37-28 76-21 95-13-4 37-24 72-76 77-11-23-15-41-19-64Z" fill="#bad9ca"/>
+  <path d="M323 178c23-21 46-38 73-53" fill="none" stroke="#19332c" stroke-width="9" stroke-linecap="round"/>
+</svg>
