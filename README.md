@@ -53,7 +53,8 @@ npm run build
 
 ## Pubblicazione
 
-Il progetto è collegato a GitHub e Vercel. Prima della produzione:
+Il progetto è collegato a GitHub e Vercel: ogni commit su `main` avvia ora un
+deploy automatico. Prima della produzione:
 
 1. eseguire tutti i test;
 2. verificare localmente interfaccia e API health;
