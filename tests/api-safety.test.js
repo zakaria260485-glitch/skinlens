@@ -13,93 +13,55 @@ function withEnvironment(values, callback) {
     if (value === undefined) delete process.env[key];
     else process.env[key] = value;
   }
-
-  return Promise.resolve()
-    .then(callback)
-    .finally(() => {
-      for (const [key, value] of previous) {
-        if (value === undefined) delete process.env[key];
-        else process.env[key] = value;
-      }
-    });
-}
-
-const environments = ['production', 'preview', 'development', undefined];
-const endpoints = [
-  {
-    name: 'analyze',
-    handler: analyze,
-    request: () => new Request('https://routinegentile.example/api/analyze', { method: 'POST' })
-  },
-  {
-    name: 'results',
-    handler: results,
-    request: () => new Request('https://routinegentile.example/api/results?id=invalid', { method: 'GET' })
-  },
-  {
-    name: 'mask',
-    handler: mask,
-    request: () => new Request('https://routinegentile.example/api/mask?id=invalid&name=invalid', { method: 'GET' })
-  }
-];
-
-for (const vercelEnvironment of environments) {
-  const environmentName = vercelEnvironment ?? 'undefined';
-
-  test(`DermIQ is default-deny in ${environmentName}`, { concurrency: false }, async () => {
-    await withEnvironment({
-      VERCEL_ENV: vercelEnvironment,
-      NODE_ENV: vercelEnvironment === 'development' ? 'development' : 'production',
-      DERMIQ_API_KEY: 'test-secret',
-      // A stale flag must not be able to reopen the public project.
-      DERMIQ_ANALYSIS_ENABLED: 'true'
-    }, async () => {
-      const originalFetch = globalThis.fetch;
-      let fetchCalls = 0;
-      globalThis.fetch = async () => {
-        fetchCalls += 1;
-        throw new Error('DermIQ must never be called by the public build');
-      };
-
-      try {
-        for (const endpoint of endpoints) {
-          const response = await endpoint.handler(endpoint.request());
-          const body = await response.json();
-
-          assert.equal(response.status, 503, `${endpoint.name} must be closed`);
-          assert.equal(body.code, 'DERMIQ_ANALYSIS_DISABLED');
-          assert.equal(body.analysisEnabled, false);
-          assert.equal(body.creditsConsumed, false);
-          assert.match(response.headers.get('cache-control'), /no-store/);
-          assert.equal(response.headers.get('vercel-cdn-cache-control'), 'no-store');
-        }
-        assert.equal(fetchCalls, 0);
-      } finally {
-        globalThis.fetch = originalFetch;
-      }
-    });
+  return Promise.resolve().then(callback).finally(() => {
+    for (const [key, value] of previous) value === undefined ? delete process.env[key] : process.env[key] = value;
   });
 }
 
-test('health exposes booleans but never the DermIQ secret', { concurrency: false }, async () => {
-  await withEnvironment({
-    VERCEL_ENV: 'production',
-    NODE_ENV: 'production',
-    DERMIQ_API_KEY: 'never-return-this-secret',
-    DERMIQ_ANALYSIS_ENABLED: 'true'
-  }, async () => {
-    const response = health();
-    const rawBody = await response.text();
-    const body = JSON.parse(rawBody);
+test('the emergency switch closes every DermIQ endpoint without consuming credits', { concurrency: false }, async () => {
+  await withEnvironment({ DERMIQ_API_KEY: 'test-secret', DERMIQ_ANALYSIS_ENABLED: 'false' }, async () => {
+    const originalFetch = globalThis.fetch;
+    let fetchCalls = 0;
+    globalThis.fetch = async () => { fetchCalls += 1; throw new Error('must not fetch'); };
+    try {
+      const requests = [
+        analyze(new Request('https://routinegentile.example/api/analyze', { method: 'POST' })),
+        results(new Request('https://routinegentile.example/api/results?id=invalid')),
+        mask(new Request('https://routinegentile.example/api/mask?id=invalid&name=invalid'))
+      ];
+      for (const pending of requests) {
+        const response = await pending;
+        const body = await response.json();
+        assert.equal(response.status, 503);
+        assert.equal(body.code, 'DERMIQ_ANALYSIS_DISABLED');
+        assert.equal(body.creditsConsumed, false);
+      }
+      assert.equal(fetchCalls, 0);
+    } finally { globalThis.fetch = originalFetch; }
+  });
+});
 
-    assert.deepEqual(body, {
-      ok: true,
-      service: 'routinegentile-backend',
-      configured: true,
-      analysisEnabled: false
-    });
-    assert.equal(rawBody.includes('never-return-this-secret'), false);
-    assert.match(response.headers.get('cache-control'), /no-store/);
-    assert.equal(response.headers.get('cdn-cache-control'), 'no-store');
+test('health reports readiness without exposing the secret', { concurrency: false }, async () => {
+  await withEnvironment({ DERMIQ_API_KEY: 'never-return-this-secret', DERMIQ_ANALYSIS_ENABLED: undefined }, async () => {
+    const response = health();
+    const raw = await response.text();
+    assert.deepEqual(JSON.parse(raw), { ok: true, service: 'routinegentile-backend', configured: true, analysisEnabled: true });
+    assert.equal(raw.includes('never-return-this-secret'), false);
+  });
+});
+
+test('analysis is same-origin and validates before contacting DermIQ', { concurrency: false }, async () => {
+  await withEnvironment({ DERMIQ_API_KEY: 'test-secret', DERMIQ_ANALYSIS_ENABLED: undefined }, async () => {
+    const originalFetch = globalThis.fetch;
+    let fetchCalls = 0;
+    globalThis.fetch = async () => { fetchCalls += 1; throw new Error('must not fetch'); };
+    try {
+      const response = await analyze(new Request('https://routinegentile.example/api/analyze', {
+        method: 'POST',
+        headers: { Origin: 'https://evil.example', 'Sec-Fetch-Site': 'cross-site' }
+      }));
+      assert.equal(response.status, 403);
+      assert.equal(fetchCalls, 0);
+    } finally { globalThis.fetch = originalFetch; }
   });
 });

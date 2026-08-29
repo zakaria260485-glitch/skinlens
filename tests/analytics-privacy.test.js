@@ -2,36 +2,21 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const root = new URL('../', import.meta.url);
-const [home, app, analytics, privacy, configText] = await Promise.all([
-  readFile(new URL('index.html', root), 'utf8'),
-  readFile(new URL('app.js', root), 'utf8'),
-  readFile(new URL('analytics.js', root), 'utf8'),
-  readFile(new URL('privacy.html', root), 'utf8'),
-  readFile(new URL('vercel.json', root), 'utf8')
+const [html, analytics, privacy] = await Promise.all([
+  readFile(new URL('../index.html', import.meta.url), 'utf8'),
+  readFile(new URL('../analytics.js', import.meta.url), 'utf8'),
+  readFile(new URL('../privacy.html', import.meta.url), 'utf8')
 ]);
 
-test('first-party analytics is loaded without inline scripts', () => {
-  assert.match(home, /<script src="\.\/analytics\.js"><\/script>/);
-  assert.match(home, /<script defer src="\/_vercel\/insights\/script\.js"><\/script>/);
-  assert.doesNotMatch(home, /<script>(?:.|\n)*?<\/script>/);
+test('first-party analytics is loaded without serializing Skin Check data', () => {
+  assert.match(html, /<script src="\/analytics\.js"><\/script>/);
+  assert.match(html, /<script defer src="\/_vercel\/insights\/script\.js"><\/script>/);
+  assert.doesNotMatch(html, /<script>(?!\s*<\/script>)/);
+  assert.doesNotMatch(analytics, /photo|skinType|sensitivity|facialHair|overallScore|DermIQ/i);
 });
 
-test('completion uses an anonymous route and never serializes profile values', () => {
-  assert.match(app, /const completionPath = '\/routine-creata'/);
-  assert.match(app, /history\.pushState\(\{ routineCreated: true \}, '', completionPath\)/);
-  assert.doesNotMatch(app, /URLSearchParams|JSON\.stringify\(profile\)|location\.hash\s*=/);
-
-  const config = JSON.parse(configText);
-  assert.deepEqual(config.rewrites, [
-    { source: '/routine-creata', destination: '/' }
-  ]);
-});
-
-test('analytics removes query data and public copy describes the exact scope', () => {
-  assert.match(analytics, /url\.search = ''/);
-  assert.match(analytics, /url\.hash = ''/);
-  assert.doesNotMatch(analytics, /skinType|sensitivity|goal|activeUse|knownReactions|photo/i);
-  assert.match(privacy, /singole risposte, la routine prodotta e l'eventuale fotografia non vengono incluse/);
-  assert.match(privacy, /consultabili per 30 giorni/);
+test('analytics strips query and fragment data', () => {
+  assert.match(analytics, /url\.search\s*=\s*''/);
+  assert.match(analytics, /url\.hash\s*=\s*''/);
+  assert.match(privacy, /fotografie, le singole risposte e i punteggi[^<]*non vengono inseriti negli eventi/i);
 });

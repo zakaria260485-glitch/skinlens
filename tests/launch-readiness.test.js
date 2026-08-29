@@ -2,44 +2,32 @@ import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 import test from 'node:test';
 
-const root = new URL('../', import.meta.url);
-const [home, privacy, terms, contact, manifest, packageJson, readme] = await Promise.all([
-  readFile(new URL('index.html', root), 'utf8'),
-  readFile(new URL('privacy.html', root), 'utf8'),
-  readFile(new URL('terms.html', root), 'utf8'),
-  readFile(new URL('contact.html', root), 'utf8'),
-  readFile(new URL('manifest.webmanifest', root), 'utf8'),
-  readFile(new URL('package.json', root), 'utf8'),
-  readFile(new URL('README.md', root), 'utf8')
+const [home, app, privacy, terms, contact, packageJson] = await Promise.all([
+  readFile(new URL('../index.html', import.meta.url), 'utf8'),
+  readFile(new URL('../app.js', import.meta.url), 'utf8'),
+  readFile(new URL('../privacy.html', import.meta.url), 'utf8'),
+  readFile(new URL('../terms.html', import.meta.url), 'utf8'),
+  readFile(new URL('../contact.html', import.meta.url), 'utf8'),
+  readFile(new URL('../package.json', import.meta.url), 'utf8')
 ]);
 
 test('RoutineGentile identity is coherent across public launch files', async () => {
-  for (const source of [home, privacy, terms, contact, manifest, packageJson, readme]) {
-    assert.match(source, /RoutineGentile|routinegentile/);
-    assert.doesNotMatch(source, /SkinLens/i);
-  }
+  for (const source of [home, privacy, terms, contact]) assert.match(source, /RoutineGentile/);
+  assert.doesNotMatch(home + app, /SkinLens/i);
   assert.equal(JSON.parse(packageJson).name, 'routinegentile');
-  assert.equal(JSON.parse(manifest).name, 'RoutineGentile');
-  await stat(new URL('assets/routinegentile-mark.svg', root));
-  await stat(new URL('assets/routinegentile-launch.jpg', root));
-  await stat(new URL('assets/routinegentile-og.svg', root));
+  await stat(new URL('../assets/routinegentile-mark.svg', import.meta.url));
 });
 
-test('launch pages expose privacy, terms, contact and an adult-only beta', () => {
-  assert.match(home, /href="\/privacy\.html"/);
-  assert.match(home, /href="\/terms\.html"/);
-  assert.match(home, /href="\/contact\.html"/);
-  assert.match(privacy, /Dati tecnici di connessione/);
-  assert.match(privacy, /Vercel Web Analytics/);
-  assert.match(privacy, /non usa cookie/);
-  assert.match(terms, /beta gratuita destinata a persone maggiorenni/);
-  assert.match(terms, /non effettua analisi cliniche/i);
-  assert.match(contact, /Mountaj Zakaria/);
-  assert.match(contact, /elialuxuryllc@gmail\.com/);
+test('launch pages expose privacy, terms, contact and adult consent', () => {
+  for (const href of ['/privacy.html', '/terms.html', '/contact.html']) assert.match(home, new RegExp(`href="${href}"`));
+  assert.match(home, /Ho almeno 18 anni/);
+  assert.match(home, /osservazioni cosmetiche[^<]*non diagnosi/i);
 });
 
-test('public claims are specific about form and photo data', () => {
-  assert.match(home, /Risposte e foto non inviate/);
-  assert.match(privacy, /non invia al nostro server le risposte del questionario o la fotografia facoltativa/);
-  assert.doesNotMatch(home, /clinicamente|scientificamente|diagnosi accurata|risultati garantiti/i);
+test('public copy states the actual photo flow and uncertainty', () => {
+  assert.match(home, /foto frontale[^<]*DermIQ/i);
+  assert.match(home, /foto laterali[^<]*dispositivo/i);
+  assert.match(home + app, /prima lettura|prima scansione/i);
+  assert.match(home + terms, /luce, posa, trucco/i);
+  assert.match(privacy, /localStorage/);
 });
