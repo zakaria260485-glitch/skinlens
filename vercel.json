@@ -3,7 +3,8 @@
   "trailingSlash": false,
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/routine-creata", "destination": "/" }
+    { "source": "/routine-creata", "destination": "/" },
+    { "source": "/kit", "destination": "/kit.html" }
   ],
   "headers": [
     {
@@ -53,6 +54,12 @@
     },
     {
       "source": "/analytics.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/kit.html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]

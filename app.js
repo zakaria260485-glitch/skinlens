@@ -22,7 +22,8 @@ const ui = {
   skinAge: $('#skinAge'), metrics: $('#metricsGrid'), priorities: $('#priorityList'), morning: $('#morningRoutine'),
   evening: $('#eveningRoutine'), newScan: $('#newScanBtn'), progressPanel: $('#progressPanel'), progressCopy: $('#progressCopy'),
   progressComparison: $('#progressComparison'), clearHistory: $('#clearHistoryBtn'), maskPanel: $('#maskPanel'), maskImage: $('#maskImage'),
-  maskSelect: $('#maskSelect'), maskLoading: $('#maskLoading'), maskExplanation: $('#maskExplanation'), maskFootnote: $('#maskFootnote')
+  maskSelect: $('#maskSelect'), maskLoading: $('#maskLoading'), maskExplanation: $('#maskExplanation'), maskFootnote: $('#maskFootnote'),
+  kitOffer: $('.analysis-kit-offer')
 };
 
 const PENDING_KEY = 'routinegentile-pending-analysis-v2';
@@ -113,6 +114,18 @@ ui.newScan.addEventListener('click', resetScan);
 ui.clearHistory.addEventListener('click', clearHistory);
 ui.maskSelect.addEventListener('change', () => loadMask(ui.maskSelect.value));
 window.addEventListener('pagehide', () => { stopCamera(); clearCapturedPhotos(); revokeMaskUrl(); });
+
+if (ui.kitOffer && 'IntersectionObserver' in window) {
+  let offerTracked = false;
+  const observer = new IntersectionObserver((entries) => {
+    if (!offerTracked && entries.some((entry) => entry.isIntersecting)) {
+      offerTracked = true;
+      window.rgTrack?.('kit_offer_view');
+      observer.disconnect();
+    }
+  }, { threshold: .45 });
+  observer.observe(ui.kitOffer);
+}
 
 async function startGuidedCamera() {
   if (!navigator.mediaDevices?.getUserMedia) {
@@ -433,6 +446,7 @@ async function runAnalysis() {
   const pending = getPendingAnalysis();
   if (pending) return resumePendingAnalysis();
   if (!selectedFile || !qualityApproved || !profileComplete() || !ui.consent.checked) return showMessage('Completa foto, controllo qualità, profilo e consenso prima di continuare.');
+  window.rgTrack?.('scan_start');
   setLoadingState(true);
   try {
     const photo = await compressImage(selectedFile);
@@ -504,11 +518,13 @@ function finishAnalysis(data) {
   ui.progressTrack.setAttribute('aria-valuenow', '100');
   ui.loading.hidden = true;
   ui.results.hidden = false;
+  window.rgTrack?.('scan_complete');
   ui.results.focus({ preventScroll: true });
   ui.results.scrollIntoView({ behavior: 'smooth' });
 }
 
 function handleAnalysisError(error) {
+  window.rgTrack?.('scan_failed');
   ui.loading.hidden = true;
   ui.scanner.hidden = false;
   ui.resume.hidden = !getPendingAnalysis();
