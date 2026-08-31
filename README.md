@@ -42,6 +42,14 @@ tramite le funzioni server protette. La chiave `DERMIQ_API_KEY` non viene mai
 inviata al browser. `DERMIQ_ANALYSIS_ENABLED=false` funge da interruttore di
 emergenza.
 
+## Misurazione del funnel
+
+La pagina carica Vercel Web Analytics e invia anche eventi anonimi alla funzione
+`/api/event`. Gli unici eventi consentiti descrivono passaggi tecnici del
+percorso: avvio e completamento dello Skin Check, visualizzazione e clic del Kit
+e apertura del checkout. Non vengono inviati fotografie, età, profilo,
+indicatori o punteggi.
+
 ## Sviluppo
 
 Non sono necessarie dipendenze esterne.
